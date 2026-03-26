@@ -1,52 +1,28 @@
-const jwt = require('jsonwebtoken');
+// Auth bypassed — equity consultant has full access with no login required
 
-const JWT_SECRET = process.env.JWT_SECRET || 'one-dsd-dev-secret-change-in-production';
+const DEFAULT_USER = {
+  id: 'user-consultant-1',
+  username: 'gbanks',
+  role: 'equity_lead',
+  full_name: 'Gary Banks',
+  department: 'Disability Services Division'
+};
 
 function requireAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : req.cookies && req.cookies.token;
-
-  if (!token) {
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
-  }
+  req.user = DEFAULT_USER;
+  next();
 }
 
 function requireRole(...roles) {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Insufficient permissions' });
-    }
+    req.user = DEFAULT_USER;
     next();
   };
 }
 
 function optionalAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : null;
-
-  if (token) {
-    try {
-      req.user = jwt.verify(token, JWT_SECRET);
-    } catch (e) {
-      req.user = null;
-    }
-  }
+  req.user = DEFAULT_USER;
   next();
 }
 
-module.exports = { requireAuth, requireRole, optionalAuth, JWT_SECRET };
+module.exports = { requireAuth, requireRole, optionalAuth, JWT_SECRET: 'unused' };
