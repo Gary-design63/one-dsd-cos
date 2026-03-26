@@ -1,6 +1,6 @@
 {
   "name": "one-dsd-consultant-os",
-  "version": "5.2.0",
+  "version": "5.1.0",
   "description": "One DSD Consultant Operating System — Minnesota DHS Disability Services Division",
   "main": "server/index.js",
   "engines": {
@@ -8,8 +8,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "dev": "node --watch server/index.js",
-    "migrate": "node server/db/migrate.js"
+    "dev": "node --watch server/index.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.9",
@@ -21,7 +20,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "pg": "^8.20.0",
+    "sql.js": "^1.14.1",
     "uuid": "^9.0.1"
   }
 }
